@@ -1,9 +1,12 @@
 import express from 'express';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import cors from 'cors';
 import nodemailer from 'nodemailer';
 
 const app = express();
 const PORT = 5000;  // Changed to port 5000
+const genAI = new GoogleGenerativeAI(process.env.VITE_GEMINI_API_KEY || 'AIzaSyBTonhTarTAjqZWhtuuA3OQgMetfudmQVU');
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 // Middleware
 app.use(cors({
@@ -36,6 +39,34 @@ const transporter = nodemailer.createTransport({
   connectionTimeout: 60000,
   greetingTimeout: 30000,
   socketTimeout: 60000
+});
+app.post('/api/chat', async (req, res) => {
+  try {
+    const { message } = req.body;
+
+    if (!message) {
+      return res.status(400).json({ error: 'Message is required' });
+    }
+
+    const prompt = `You are an AI assistant for a professional coaching program website.
+
+    Current message: "${message}"
+
+    Please respond in a helpful, professional, and encouraging manner. 
+    If the user is asking about booking a meeting or consultation, guide them to provide their name and email address. 
+    If they seem interested in coaching services, provide relevant information about the benefits of coaching.
+
+    Keep responses conversational and under 150 words.`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+
+    res.status(200).json({ response: text });
+  } catch (error) {
+    console.error('Error with Gemini AI:', error);
+    res.status(500).json({ error: 'Failed to generate response' });
+  }
 });
 
 // Book meeting endpoint (simplified without Calendly)
