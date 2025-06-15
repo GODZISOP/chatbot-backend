@@ -94,7 +94,7 @@ app.post('/api/book-meeting', async (req, res) => {
     }
 
     // Simulate a successful meeting scheduling with a mock URL
-    const schedulingUrl = `http://localhost:5000/booking/${Math.random().toString(36).substring(7)}`;
+    const schedulingUrl = `https://calendly.com/appointmentstudio1/${Math.random().toString(36).substring(7)}`;
 
     // Verify the transporter before sending emails
     try {
