@@ -50,13 +50,27 @@ app.post('/api/chat', async (req, res) => {
 
     const prompt = `You are an AI assistant for a professional coaching program website.
 
-    Current message: "${message}"
+Current message: "${message}"
 
-    Please respond in a helpful, professional, and encouraging manner. 
-    If the user is asking about booking a meeting or consultation, guide them to provide their name and email address. 
-    If they seem interested in coaching services, provide relevant information about the benefits of coaching.
+Please respond in a helpful, professional, and encouraging manner.
 
-    Keep responses conversational and under 150 words.`;
+Use the following response rules depending on what the user is asking:
+
+1. If the user asks about pricing, cost, packages, budget, or what's included — provide the following information:
+
+"Our basic package is affordable and priced at $200. With this package, we'll provide you with 7-8 booked clients who will pay for your services. Our pricing is reasonable, and you can expect to earn at least $1,000 to $2,000 monthly.
+
+Additionally, we're currently offering a special deal until the end of June. For just $250, we'll create a website for your coaching services, tailored to your preferences. This deal also includes 7-8 booked appointments.
+
+We'll assign an experienced appointment setter to work on your behalf, finding clients who are interested in purchasing your coaching program services. We'll utilize platforms such as Facebook, LinkedIn, Gmail, and others to identify potential clients."
+
+You can also visit our website to learn more: https://appointment-studio.netlify.app
+
+2. If the user is asking to book a meeting or consultation, kindly guide them to provide their name and email address.
+
+3. If they ask about coaching services in general, explain the benefits of working with a professional coach — clarity, accountability, and personal growth.
+
+Keep responses friendly, conversational, and under 150 words.`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
@@ -68,6 +82,7 @@ app.post('/api/chat', async (req, res) => {
     res.status(500).json({ error: 'Failed to generate response' });
   }
 });
+
 
 // Book meeting endpoint (simplified without Calendly)
 app.post('/api/book-meeting', async (req, res) => {
