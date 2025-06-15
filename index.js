@@ -8,6 +8,11 @@ const PORT = 5000;  // Changed to port 5000
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.post('/', async (req, res) => {
+  console.log("Backend is running...");  // This will confirm the backend is working
+  console.log("Received request:", req.body);  // Log request data
+  // Rest of your code...
+});
 
 // Email configuration for Gmail
 const transporter = nodemailer.createTransport({
