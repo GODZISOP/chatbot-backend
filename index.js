@@ -7,8 +7,12 @@ const PORT = 5000;  // Changed to port 5000
 
 // Middleware
 app.use(cors({
-  origin: 'https://chatbot-three-eta-74.vercel.app'
+  origin: ['https://chatbot-three-eta-74.vercel.app', 'https://chatbot-c23f.vercel.app/'],
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type'],
+  credentials: true,
 }));
+
 
 app.use(express.json());
 app.get('/', (req, res) => {
